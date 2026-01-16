@@ -26,11 +26,13 @@ import org.keycloak.broker.provider.BrokeredIdentityContext;
 import org.keycloak.broker.provider.IdentityBrokerException;
 import org.keycloak.broker.provider.util.SimpleHttp;
 import org.keycloak.broker.social.SocialIdentityProvider;
+import org.keycloak.broker.provider.AuthenticationRequest;
 import org.keycloak.events.EventBuilder;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.services.ErrorPageException;
 import org.keycloak.services.messages.Messages;
 
+import jakarta.ws.rs.core.UriBuilder;
 import java.util.Set;
 
 /**
@@ -126,5 +128,15 @@ public class DiscordIdentityProvider extends AbstractOAuth2IdentityProvider<Disc
         } else {
             return DEFAULT_SCOPE;
         }
+    }
+
+    @Override
+    protected UriBuilder createAuthorizationUrl(AuthenticationRequest request) {
+        UriBuilder uri = super.createAuthorizationUrl(request);
+        String prompt = getConfig().getPrompt();
+        if (prompt != null && !prompt.trim().isEmpty()) {
+            uri.queryParam("prompt", prompt);
+        }
+        return uri;
     }
 }

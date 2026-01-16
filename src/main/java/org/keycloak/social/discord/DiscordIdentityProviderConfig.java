@@ -61,4 +61,8 @@ public class DiscordIdentityProviderConfig extends OAuth2IdentityProviderConfig 
     public void setPrompt(String prompt) {
         getConfig().put("prompt", prompt);
     }
+
+    public String getPrompt() {
+        return getConfig().get("prompt");
+    }
 }
